@@ -412,12 +412,45 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     append_log(run_dir, "dossier-assembler complete, sections 1-6 plus section 7 placeholder")
 
     # --- Stage 5: audit-pass ---
-    full_dossier_raw = call_skill(
+    # audit-pass returns ONLY section 7's content, not the whole document.
+    # Reproducing sections 1-6 verbatim was tried and failed silently in
+    # practice, the model dropped them rather than erroring, so the splice
+    # is done here in code instead, which can't drop a character.
+    section_7_raw = call_skill(
         "audit-pass", {"dossier_markdown": dossier_raw}, model, max_budget_usd, timeout, run_dir,
     )
-    append_log(run_dir, "audit-pass complete, final dossier assembled")
+    full_dossier_raw = splice_section_7(dossier_raw, section_7_raw)
+    append_log(run_dir, "audit-pass complete, section 7 spliced into dossier by code, not by model reproduction")
 
     return full_dossier_raw, skipped_companies
+
+
+def splice_section_7(dossier_with_placeholder, section_7_content):
+    """
+    Replaces the "## 7. Review of Flagged and Satisfactory Content and
+    Claims" placeholder section (and its "*Pending audit-pass.*" body)
+    with audit-pass's actual section 7 content, entirely in code. This is
+    the fix for a real failure: asking a model to reproduce a long
+    multi-company dossier verbatim in order to append one new section
+    resulted in it silently dropping sections 1-6 instead. Splicing text
+    in Python cannot drop content the way a model reproduction can.
+    """
+    section_7_content = section_7_content.strip()
+    pattern = re.compile(
+        r"##\s*7\.\s*Review of Flagged and Satisfactory Content and Claims.*",
+        re.DOTALL,
+    )
+    if pattern.search(dossier_with_placeholder):
+        return pattern.sub(section_7_content, dossier_with_placeholder).strip() + "\n"
+    else:
+        # Placeholder heading not found verbatim, dossier-assembler may have
+        # phrased it slightly differently. Fail loudly rather than silently
+        # appending in the wrong place or silently dropping section 7.
+        raise ValueError(
+            "could not find the section 7 placeholder heading in dossier-assembler's "
+            "output to splice audit-pass's content into. Check dossier-assembler's "
+            "exact placeholder wording against this regex."
+        )
 
 
 def main():
