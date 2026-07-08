@@ -27,8 +27,17 @@ A markdown document covering sections 1 through 6 of the dossier template, struc
 - No numeric claim appears without a confidence band attached
 - Any subsection with no supporting source is written as explicitly unavailable in place, not omitted silently (e.g. "*Not available. No supporting source found.*")
 - Section 7, "Review of Flagged and Satisfactory Content and Claims," is left as a placeholder heading only, with body text "*Pending audit-pass.*" dossier-assembler does not write section 7's content. That belongs to audit-pass, which runs after assembly and fills it in as the final step.
+- **A required "Strategy Synthesis" subsection at the end of Section 1 (Firm Profile).** This is not a restatement of what the firm says about itself, that content already exists earlier in Section 1, cited to firm-profiler's claims. This subsection's job is to compare the firm's stated strategy against the actual, observed composition of its portfolio (from portfolio-discoverer and the portco-profiler profiles), and surface one or two non-obvious observations that the firm's own materials do not state directly. If the observation is just a paraphrase of something firm-profiler already asserted, it isn't synthesis, redo it. A synthesis claim is itself a claim: it needs a confidence band (usually medium at best, since it's inference layered on top of several underlying claims, never high) and a source_type of "public inference," with its reasoning chain stated plainly enough that a reader can check it against the same underlying claims.
 
-Output is always the complete document, sections 1 through 6 plus the section 7 placeholder. No diffs.
+**Worked example of the difference, using real Palladium data from this pipeline's own output:**
+
+*Restatement, not synthesis (don't do this):* "Palladium positions itself as a thematic, verticalized investor, and has invested approximately $1.5 billion in the U.S. Hispanic market since 2000." This just repeats firm-profiler-012 and firm-profiler-027. No synthesis has happened, it's a citation with different words around it.
+
+*Actual synthesis (do this):* "Despite the firm's Hispanic-market thesis being framed prominently in its own materials, the actual portfolio composition skews toward asset-light, recurring-revenue service platforms in fragmented, non-cyclical demand categories, immigration compliance software and legal services (Envoy Global), hospice durable medical equipment logistics (DME Express), behavioral health services (Health Connect America), rather than consumer-facing Hispanic-market retail or CPG plays. This suggests the Hispanic-market thesis functions more as a sourcing and underwriting differentiator, likely giving Palladium access to founder relationships and deal flow other sponsors don't have, than as a binding operating constraint on what the firm actually buys. *(synthesis-001, Medium, public inference: derived from comparing firm-profiler's stated thesis against the sector distribution actually observed across portfolio-discoverer's and portco-profiler's combined output, not stated directly by either)*."
+
+That second example took two separately-sourced facts (the firm's stated thesis, and the actual sector composition of its holdings) that no single source stated together, and drew a conclusion neither source asserts on its own. That's what makes it non-obvious rather than descriptive.
+
+Output is always the complete document, sections 1 through 6 (including the required Strategy Synthesis subsection) plus the section 7 placeholder. No diffs.
 
 ## Output format (hybrid) — note the exception
 
