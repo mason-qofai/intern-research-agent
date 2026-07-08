@@ -21,6 +21,7 @@ Usage:
 
 import argparse
 import datetime
+import hashlib
 import json
 import pathlib
 import re
@@ -199,7 +200,13 @@ def call_skill(skill_name, input_payload, model, max_budget_usd, timeout, run_di
 
 def save_raw_output(run_dir, label, raw_text):
     run_dir.mkdir(parents=True, exist_ok=True)
-    safe_label = label.replace(" ", "-").replace("/", "-")
+    safe_label = re.sub(r"[^A-Za-z0-9._-]", "-", label)
+    # Cap well under filesystem limits (macOS/most Linux: 255 bytes). A
+    # malformed label (e.g. an entire flagged sentence used as a company
+    # name) should never be able to crash the run over a filename length.
+    if len(safe_label) > 100:
+        digest = hashlib.sha256(safe_label.encode()).hexdigest()[:8]
+        safe_label = safe_label[:90] + "-" + digest
     (run_dir / f"{safe_label}.md").write_text(raw_text)
 
 
@@ -282,26 +289,41 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     portfolio_md, portfolio_claims = extract_trailing_json_block(portfolio_raw)
     append_log(run_dir, f"portfolio-discoverer complete, {len(portfolio_claims)} claims")
 
-    # Company names come from portfolio_claims (field == "company_name",
-    # not flagged/withheld). This is a patch, not the real fix: it splits
-    # on the word "is" as a whole word, which held up against every
-    # phrasing variant seen so far ("is an active portfolio company",
-    # "is presented as a current investment"). The real fix is having
-    # portfolio-discoverer emit a dedicated company_name field instead of
-    # making the orchestrator guess from prose, worth doing before this
-    # script is trusted long-term, but out of scope for tonight's run.
-    def extract_company_name(claim_text):
-        match = re.split(r"\bis\b", claim_text, maxsplit=1)
-        name = match[0].strip().rstrip(",")
+    # Company names now come directly from the required "company_name"
+    # field on each claim, per the updated portfolio-discoverer contract.
+    # No more parsing names out of the "text" field's prose, that was
+    # tonight's actual root cause: a claim whose text was a long status
+    # dispute got treated as a company name because nothing forced a
+    # clean, separate field to read instead.
+    #
+    # The length check stays as a defensive fallback, not the primary
+    # mechanism, in case a claim is missing company_name or an older/
+    # non-conforming SKILL.md is still in place somewhere.
+    MAX_NAME_LENGTH = 80
+
+    def extract_company_name(claim):
+        name = claim.get("company_name")
         if not name:
-            raise ValueError(f"could not extract a company name from claim text: {claim_text!r}")
+            raise ValueError(
+                f"claim has no company_name field, contract violation: {claim!r}"
+            )
+        name = name.strip()
+        if len(name) > MAX_NAME_LENGTH:
+            raise ValueError(
+                f"company_name is {len(name)} chars, too long to be a real "
+                f"company name, likely a contract violation upstream: {name!r}"
+            )
         return name
 
-    company_names = [
-        extract_company_name(c["text"])
-        for c in portfolio_claims
-        if c.get("field") == "company_name" and not c.get("flagged")
-    ]
+    company_names = []
+    for c in portfolio_claims:
+        if c.get("field") != "company_name" or c.get("flagged"):
+            continue
+        try:
+            company_names.append(extract_company_name(c))
+        except ValueError as e:
+            append_log(run_dir, f"SKIPPED a portfolio-discoverer claim during name extraction: {e}")
+
     append_log(run_dir, f"extracted {len(company_names)} company names: {company_names}")
 
     # --- Stage 2: portco-profiler + private-data-approximator, per company ---
@@ -336,8 +358,8 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
                 invocation_label=f"private-data-approximator-{company_name}",
             )
             financial_md, financial_claims = extract_trailing_json_block(financial_raw)
-        except (ValueError, SystemExit) as e:
-            append_log(run_dir, f"SKIPPED {company_name}: {e}")
+        except (Exception, SystemExit) as e:
+            append_log(run_dir, f"SKIPPED {company_name}: {type(e).__name__}: {e}")
             skipped_companies.append(company_name)
             continue
 
