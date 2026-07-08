@@ -47,3 +47,14 @@ Output is a markdown body (business_description, leadership, notable_events, etc
 ```
 
 Prefix claim_ids with the company name (or a slug of it), since portco-profiler runs once per company and ids must stay unique across every invocation in a run. `confidence` and `source_type` stay `null`, filled in downstream.
+
+## Output requirement, non-negotiable
+
+The response must end with the "## Claims" heading and its fenced JSON
+block, always, regardless of what precedes it. If you perform a
+self-check, a second pass over the sources, or any additional
+verification step and conclude the profile is complete with no updates
+needed, that conclusion is not the end of your response. State it, then
+still produce the Claims block for everything you found. A response that
+ends on a verification note instead of the Claims block is incomplete and
+violates this skill's contract.
