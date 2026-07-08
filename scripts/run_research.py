@@ -283,41 +283,73 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     append_log(run_dir, f"portfolio-discoverer complete, {len(portfolio_claims)} claims")
 
     # Company names come from portfolio_claims (field == "company_name",
-    # not flagged/withheld) rather than re-parsing the markdown table.
+    # not flagged/withheld). This is a patch, not the real fix: it splits
+    # on the word "is" as a whole word, which held up against every
+    # phrasing variant seen so far ("is an active portfolio company",
+    # "is presented as a current investment"). The real fix is having
+    # portfolio-discoverer emit a dedicated company_name field instead of
+    # making the orchestrator guess from prose, worth doing before this
+    # script is trusted long-term, but out of scope for tonight's run.
+    def extract_company_name(claim_text):
+        match = re.split(r"\bis\b", claim_text, maxsplit=1)
+        name = match[0].strip().rstrip(",")
+        if not name:
+            raise ValueError(f"could not extract a company name from claim text: {claim_text!r}")
+        return name
+
     company_names = [
-        c["text"].split(" is a")[0].strip()
+        extract_company_name(c["text"])
         for c in portfolio_claims
         if c.get("field") == "company_name" and not c.get("flagged")
     ]
+    append_log(run_dir, f"extracted {len(company_names)} company names: {company_names}")
 
     # --- Stage 2: portco-profiler + private-data-approximator, per company ---
     # Sequential loop here. Module 8 fans this out into one subagent per
     # company running concurrently.
+    #
+    # Wrapped in try/except per company: if one company's output fails to
+    # parse (e.g. the model ends its response on a self-check note instead
+    # of the required Claims block), that company is logged as skipped and
+    # the loop moves on, rather than the whole multi-hour run crashing and
+    # losing every company already completed. Skipped companies are a real
+    # gap to fix in portco-profiler's SKILL.md later, not something to
+    # silently ignore, they're reported at the end.
     portco_mds = []
     portco_claims_lists = []
     financial_mds = []
     financial_claims_lists = []
+    skipped_companies = []
 
     for company_name in company_names:
-        portco_raw = call_skill(
-            "portco-profiler", {"company_name": company_name, "parent_firm": firm_name},
-            model, max_budget_usd, timeout, run_dir,
-            invocation_label=f"portco-profiler-{company_name}",
-        )
-        portco_md, portco_claims = extract_trailing_json_block(portco_raw)
+        try:
+            portco_raw = call_skill(
+                "portco-profiler", {"company_name": company_name, "parent_firm": firm_name},
+                model, max_budget_usd, timeout, run_dir,
+                invocation_label=f"portco-profiler-{company_name}",
+            )
+            portco_md, portco_claims = extract_trailing_json_block(portco_raw)
+
+            financial_raw = call_skill(
+                "private-data-approximator", {"portco_profile": {"company_name": company_name, "profile_markdown": portco_md}},
+                model, max_budget_usd, timeout, run_dir,
+                invocation_label=f"private-data-approximator-{company_name}",
+            )
+            financial_md, financial_claims = extract_trailing_json_block(financial_raw)
+        except (ValueError, SystemExit) as e:
+            append_log(run_dir, f"SKIPPED {company_name}: {e}")
+            skipped_companies.append(company_name)
+            continue
+
         portco_mds.append((company_name, portco_md))
         portco_claims_lists.append(portco_claims)
-
-        financial_raw = call_skill(
-            "private-data-approximator", {"portco_profile": {"company_name": company_name, "profile_markdown": portco_md}},
-            model, max_budget_usd, timeout, run_dir,
-            invocation_label=f"private-data-approximator-{company_name}",
-        )
-        financial_md, financial_claims = extract_trailing_json_block(financial_raw)
         financial_mds.append((company_name, financial_md))
         financial_claims_lists.append(financial_claims)
 
         append_log(run_dir, f"profiled and estimated {company_name}")
+
+    if skipped_companies:
+        append_log(run_dir, f"SKIPPED {len(skipped_companies)} companies total: {skipped_companies}")
 
     # --- Stage 3: confidence-scorer + source-typer, batch, adjacent ---
     ratable_claims, pre_flagged_claims = collect_claims(
@@ -350,6 +382,7 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
         "financial_estimates": [{"company": name, "markdown": md} for name, md in financial_mds],
         "rated_claims": merged_claims,
         "pre_flagged_claims": pre_flagged_claims,
+        "skipped_companies": skipped_companies,
     }
     dossier_raw = call_skill(
         "dossier-assembler", assembler_input, model, max_budget_usd, timeout, run_dir,
@@ -362,7 +395,7 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     )
     append_log(run_dir, "audit-pass complete, final dossier assembled")
 
-    return full_dossier_raw
+    return full_dossier_raw, skipped_companies
 
 
 def main():
@@ -388,7 +421,7 @@ def main():
               "confidence-scorer, source-typer, dossier-assembler, audit-pass")
         return
 
-    full_dossier = run_pipeline(
+    full_dossier, skipped_companies = run_pipeline(
         args.firm_name, args.model, args.max_budget_usd, args.timeout, run_dir
     )
 
@@ -397,6 +430,9 @@ def main():
     out_path.write_text(full_dossier.strip() + "\n")
     print(f"[run_research] wrote dossier to {out_path}", file=sys.stderr)
     print(f"[run_research] run log at {run_dir / 'run_log.txt'}", file=sys.stderr)
+    if skipped_companies:
+        print(f"[run_research] WARNING: {len(skipped_companies)} companies skipped "
+              f"due to parse failures, dossier is incomplete: {skipped_companies}", file=sys.stderr)
 
 
 if __name__ == "__main__":
