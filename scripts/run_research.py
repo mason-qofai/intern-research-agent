@@ -330,13 +330,17 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     # Sequential loop here. Module 8 fans this out into one subagent per
     # company running concurrently.
     #
-    # Wrapped in try/except per company: if one company's output fails to
-    # parse (e.g. the model ends its response on a self-check note instead
-    # of the required Claims block), that company is logged as skipped and
-    # the loop moves on, rather than the whole multi-hour run crashing and
-    # losing every company already completed. Skipped companies are a real
-    # gap to fix in portco-profiler's SKILL.md later, not something to
-    # silently ignore, they're reported at the end.
+    # Each company gets up to two attempts (one retry) before being logged
+    # as skipped. Most failures seen tonight were one-off issues (a self-
+    # check derailing the output format, a transient empty-stderr crash)
+    # rather than a fundamental problem with that company's data, and a
+    # second attempt is cheap insurance against exactly that kind of
+    # transient failure, rather than giving up after a single bad response.
+    # If both attempts fail, the company is logged as skipped and the loop
+    # moves on, rather than the whole multi-hour run crashing and losing
+    # every company already completed.
+    MAX_ATTEMPTS_PER_COMPANY = 2
+
     portco_mds = []
     portco_claims_lists = []
     financial_mds = []
@@ -344,22 +348,37 @@ def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir):
     skipped_companies = []
 
     for company_name in company_names:
-        try:
-            portco_raw = call_skill(
-                "portco-profiler", {"company_name": company_name, "parent_firm": firm_name},
-                model, max_budget_usd, timeout, run_dir,
-                invocation_label=f"portco-profiler-{company_name}",
-            )
-            portco_md, portco_claims = extract_trailing_json_block(portco_raw)
+        last_error = None
+        succeeded = False
 
-            financial_raw = call_skill(
-                "private-data-approximator", {"portco_profile": {"company_name": company_name, "profile_markdown": portco_md}},
-                model, max_budget_usd, timeout, run_dir,
-                invocation_label=f"private-data-approximator-{company_name}",
-            )
-            financial_md, financial_claims = extract_trailing_json_block(financial_raw)
-        except (Exception, SystemExit) as e:
-            append_log(run_dir, f"SKIPPED {company_name}: {type(e).__name__}: {e}")
+        for attempt in range(1, MAX_ATTEMPTS_PER_COMPANY + 1):
+            try:
+                if attempt > 1:
+                    append_log(run_dir, f"RETRY {company_name} (attempt {attempt}/{MAX_ATTEMPTS_PER_COMPANY})")
+
+                portco_raw = call_skill(
+                    "portco-profiler", {"company_name": company_name, "parent_firm": firm_name},
+                    model, max_budget_usd, timeout, run_dir,
+                    invocation_label=f"portco-profiler-{company_name}"
+                    + (f"-attempt{attempt}" if attempt > 1 else ""),
+                )
+                portco_md, portco_claims = extract_trailing_json_block(portco_raw)
+
+                financial_raw = call_skill(
+                    "private-data-approximator", {"portco_profile": {"company_name": company_name, "profile_markdown": portco_md}},
+                    model, max_budget_usd, timeout, run_dir,
+                    invocation_label=f"private-data-approximator-{company_name}"
+                    + (f"-attempt{attempt}" if attempt > 1 else ""),
+                )
+                financial_md, financial_claims = extract_trailing_json_block(financial_raw)
+                succeeded = True
+                break
+            except (Exception, SystemExit) as e:
+                last_error = e
+                append_log(run_dir, f"FAILED {company_name} on attempt {attempt}: {type(e).__name__}: {e}")
+
+        if not succeeded:
+            append_log(run_dir, f"SKIPPED {company_name} after {MAX_ATTEMPTS_PER_COMPANY} attempts: {type(last_error).__name__}: {last_error}")
             skipped_companies.append(company_name)
             continue
 
