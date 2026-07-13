@@ -401,7 +401,7 @@ def splice_section_7(dossier_with_placeholder, section_7_content):
         )
 
 
-async def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir, max_concurrency):
+async def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir, max_concurrency, max_companies=None):
     append_log(run_dir, f"pipeline start for {firm_name!r}")
     semaphore = asyncio.Semaphore(max_concurrency)
 
@@ -438,6 +438,14 @@ async def run_pipeline(firm_name, model, max_budget_usd, timeout, run_dir, max_c
             append_log(run_dir, f"SKIPPED a portfolio-discoverer claim during name extraction: {e}")
 
     append_log(run_dir, f"extracted {len(company_names)} company names: {company_names}")
+
+    if max_companies is not None and len(company_names) > max_companies:
+        append_log(
+            run_dir,
+            f"limiting to first {max_companies} of {len(company_names)} companies "
+            f"(--max-companies): dropping {company_names[max_companies:]}"
+        )
+        company_names = company_names[:max_companies]
 
     # --- Stage 2: portco-profiler, one subagent per company, concurrent,
     # bounded by max_concurrency via the semaphore inside call_skill ---
@@ -537,6 +545,10 @@ def main():
     parser.add_argument("--timeout", type=int, default=600)
     parser.add_argument("--max-concurrency", type=int, default=4,
                          help="max simultaneous claude -p subprocesses (default: 4)")
+    parser.add_argument("--max-companies", type=int, default=None,
+                         help="limit the run to the first N portfolio companies found "
+                              "(default: no limit, use all companies). Good for a smoke "
+                              "test of the parallel fan-out before a full run.")
     parser.add_argument("--out", default=None)
     parser.add_argument("--dry-run", action="store_true",
                          help="print the planned call sequence and exit, do not call claude")
@@ -550,6 +562,8 @@ def main():
         print(f"Run log would be written to: {run_dir}")
         print("Call sequence:")
         print("  1. firm-profiler + portfolio-discoverer (concurrent)")
+        if args.max_companies:
+            print(f"     (limited to first {args.max_companies} companies found)")
         print(f"  2. portco-profiler, one subagent per portfolio company "
               f"(concurrent, max {args.max_concurrency} at a time)")
         print(f"  3. private-data-approximator, one subagent per profiled company "
@@ -562,7 +576,7 @@ def main():
     try:
         full_dossier, skipped_companies, financial_skipped = asyncio.run(
             run_pipeline(args.firm_name, args.model, args.max_budget_usd, args.timeout,
-                         run_dir, args.max_concurrency)
+                         run_dir, args.max_concurrency, args.max_companies)
         )
     except SkillCallError as e:
         sys.exit(str(e))
