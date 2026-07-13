@@ -52,19 +52,19 @@
       "id": "v1_claim_009",
       "dossier_version": "v1",
       "claim": "Rather than relying on financial engineering, Cortec emphasizes operational partnership.",
-      "expected_confidence": "medium"
+      "expected_confidence": "low"
     },
     {
       "id": "v1_claim_010",
       "dossier_version": "v1",
       "claim": "Based in Phoenix, AZ, A1 Garage is a leading provider of residential repair and replacement garage door services across the U.S.",
-      "expected_confidence": "low"
+      "expected_confidence": "medium"
     },
     {
       "id": "v4_claim_011",
       "dossier_version": "v1",
       "claim": "Headquartered in Las Vegas, NV, Goettl is a leading provider of HVAC and plumbing maintenance, repair, and replacement services to the single-family residential market",
-      "expected_confidence": "low"
+      "expected_confidence": "high"
     },
     {
       "id": "v1_claim_012",
@@ -100,13 +100,13 @@
       "id": "v1_claim_017",
       "dossier_version": "v1",
       "claim": "Platform investments: 43",
-      "expected_confidence": "high"
+      "expected_confidence": "medium"
     },
     {
       "id": "v1_claim_018",
       "dossier_version": "v1",
       "claim": "Add-on acquisitions: 160",
-      "expected_confidence": "high"
+      "expected_confidence": "medium"
     },
     {
       "id": "v1_claim_019",
@@ -117,7 +117,7 @@
     {
       "id": "v1_claim_020",
       "dossier_version": "v1",
-      "claim": "Control investments",
+      "claim": "Cortec uses control investment strategy to drive value creation through operational improvements, strategic add-on acquisitions, and organic growth initiatives.",
       "expected_confidence": "medium"
     },
     {
@@ -135,14 +135,14 @@
     {
       "id": "v1_claim_023",
       "dossier_version": "v1",
-      "claim": "The firm describes itself as a differentiated, value-added partner for entrepreneurs, families, and management teams",
+      "claim": "The firm is a differentiated, value-added partner for entrepreneurs, families, and management teams",
       "expected_confidence": "low"
     },
     {
       "id": "v1_claim_024",
       "dossier_version": "v1",
       "claim": "Platform realizations: 29",
-      "expected_confidence": "high"
+      "expected_confidence": "medium"
     },
     {
       "id": "v1_claim_025",
@@ -154,7 +154,7 @@
       "id": "v4_claim_001",
       "dossier_version": "v4",
       "claim": "Since its founding, Palladium has acquired more than 230–240 businesses across 41 platform investments and completed 200+ add-on acquisitions.",
-      "expected_confidence": "high"
+      "expected_confidence": "medium"
     },
     {
       "id": "v4_claim_002",
@@ -220,7 +220,7 @@
       "id": "v4_claim_012",
       "dossier_version": "v4",
       "claim": "Cobalt Labs, Accupac's R&D arm, partners with sustainability-oriented customers to customize sustainable product formulas around recyclability, virgin-material content, and clean/all-natural designations.",
-      "expected_confidence": "low"
+      "expected_confidence": "medium"
     },
     {
       "id": "v4_claim_013",
@@ -263,6 +263,36 @@
       "dossier_version": "v4",
       "claim": "Its brand portfolio includes Panamei Seafood®, Mambo Foods®, and exclusive distribution of Chiquita® Frozen tropical fruits, High River Angus®, Kikiriquirch® poultry, and a licensed Certified Angus Beef® agreement.",
       "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_021",
+      "dossier_version": "v4",
+      "claim": "Kymera is highlighted in Palladium's 2025 Annual Stewardship Report for its 'Safety First - Stop. Think. Act.' safety program",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_022",
+      "dossier_version": "v4",
+      "claim": "Consumer — Experiential / Out-of-Home Entertainment, aligning with Palladium's stated Flagship theme (Confidence: Medium — sector alignment inferred)",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_023",
+      "dossier_version": "v4",
+      "claim": "In 2025, the medical technology company overhauled talent acquisition (AI-enabled candidate screening, structured behavioral interviews, defined hiring KPIs) and expanded retention programming, reportedly contributing to a 57% increase in families actively receiving services.",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_024",
+      "dossier_version": "v4",
+      "claim": "The firm is famous for its exit of the the majority investment of YETI. ",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_025",
+      "dossier_version": "v4",
+      "claim": "Founded June 2008, the company has provided over $2 billion to borrowers to almost all 50 states.",
+      "expected_confidence": "medium"
     }
   ]
 }
