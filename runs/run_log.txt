@@ -1,0 +1,43 @@
+[2026-07-13T08:24:14] pipeline start for 'Palladium Equity Partners'
+[2026-07-13T08:26:14] firm-profiler complete, 29 claims
+[2026-07-13T08:26:14] portfolio-discoverer complete, 18 claims
+[2026-07-13T08:26:14] extracted 18 company names: ['Accupac', 'Bodewell Group', 'Collision Auto Parts', "Daniel's", 'Del Real Foods', 'DME Express', 'Envoy Global', 'Fora Financial', 'Health Connect America', 'Kymera International', 'Paragon', 'Quirch Foods', 'Sky Zone', 'Source Logistics', 'Superior Environmental Solutions', 'Skinny Mixes', 'Spice World', 'TransForce']
+[2026-07-13T08:26:42] portco-profiler complete for Daniel's
+[2026-07-13T08:26:45] portco-profiler complete for Accupac
+[2026-07-13T08:26:49] portco-profiler complete for Bodewell Group
+[2026-07-13T08:26:52] portco-profiler complete for Collision Auto Parts
+[2026-07-13T08:27:07] portco-profiler complete for Del Real Foods
+[2026-07-13T08:27:11] portco-profiler complete for Fora Financial
+[2026-07-13T08:27:23] portco-profiler complete for DME Express
+[2026-07-13T08:27:31] portco-profiler complete for Envoy Global
+[2026-07-13T08:27:40] portco-profiler complete for Health Connect America
+[2026-07-13T08:27:41] portco-profiler complete for Paragon
+[2026-07-13T08:27:59] portco-profiler complete for Quirch Foods
+[2026-07-13T08:28:07] portco-profiler complete for Kymera International
+[2026-07-13T08:28:23] portco-profiler complete for Sky Zone
+[2026-07-13T08:28:27] portco-profiler complete for Source Logistics
+[2026-07-13T08:28:44] portco-profiler complete for Skinny Mixes
+[2026-07-13T08:28:46] portco-profiler complete for Spice World
+[2026-07-13T08:28:48] portco-profiler complete for Superior Environmental Solutions
+[2026-07-13T08:29:13] portco-profiler complete for TransForce
+[2026-07-13T08:33:08] private-data-approximator complete for Accupac
+[2026-07-13T08:33:18] private-data-approximator complete for Daniel's
+[2026-07-13T08:34:24] private-data-approximator complete for Collision Auto Parts
+[2026-07-13T08:34:29] private-data-approximator complete for Bodewell Group
+[2026-07-13T08:35:29] private-data-approximator complete for DME Express
+[2026-07-13T08:36:44] private-data-approximator complete for Del Real Foods
+[2026-07-13T08:37:37] private-data-approximator complete for Fora Financial
+[2026-07-13T08:39:17] private-data-approximator complete for Envoy Global
+[2026-07-13T08:39:22] private-data-approximator complete for Health Connect America
+[2026-07-13T08:40:23] private-data-approximator complete for Kymera International
+[2026-07-13T08:41:47] private-data-approximator complete for Paragon
+[2026-07-13T08:41:57] private-data-approximator complete for Quirch Foods
+[2026-07-13T08:44:00] private-data-approximator complete for Sky Zone
+[2026-07-13T08:44:45] private-data-approximator complete for Skinny Mixes
+[2026-07-13T08:45:09] private-data-approximator complete for Source Logistics
+[2026-07-13T08:47:34] private-data-approximator complete for Superior Environmental Solutions
+[2026-07-13T08:49:20] private-data-approximator complete for Spice World
+[2026-07-13T08:49:39] private-data-approximator complete for TransForce
+[2026-07-13T08:49:39] 272 claims to rate, 2 pre-flagged
+[2026-07-13T08:55:42] confidence-scorer and source-typer complete
+[2026-07-13T09:00:50] dossier-assembler complete, sections 1-6 plus section 7 placeholder
