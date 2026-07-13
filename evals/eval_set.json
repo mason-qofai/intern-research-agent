@@ -1,0 +1,268 @@
+{
+  "test_cases": [
+    {
+      "id": "v1_claim_001",
+      "dossier_version": "v1",
+      "claim": "Founded in 1984 by business executives, Cortec Group is a New York–based private equity firm",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_002",
+      "dossier_version": "v1",
+      "claim": "Cortec has raised eight institutional funds",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_003",
+      "dossier_version": "v1",
+      "claim": "Cortec Group is a New York–based private equity firm that positions itself as distinct from most peers, citing a heritage rooted in business and operations rather than Wall Street",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_004",
+      "dossier_version": "v1",
+      "claim": "The firm reports achieving top-quartile-or-better returns across its three fully realized funds.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_005",
+      "dossier_version": "v1",
+      "claim": "It is currently investing Cortec Group Fund VIII, which closed at approximately $3.2 billion in February 2024.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_006",
+      "dossier_version": "v1",
+      "claim": "Total transaction value: ~$14 billion",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_007",
+      "dossier_version": "v1",
+      "claim": "Total AUM: ~$6.4 billion",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_008",
+      "dossier_version": "v1",
+      "claim": "Target EBITDA: $15 million to $70 million of annual EBITDA (>$1 million for add-ons)",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_009",
+      "dossier_version": "v1",
+      "claim": "Rather than relying on financial engineering, Cortec emphasizes operational partnership.",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v1_claim_010",
+      "dossier_version": "v1",
+      "claim": "Based in Phoenix, AZ, A1 Garage is a leading provider of residential repair and replacement garage door services across the U.S.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_011",
+      "dossier_version": "v1",
+      "claim": "Headquartered in Las Vegas, NV, Goettl is a leading provider of HVAC and plumbing maintenance, repair, and replacement services to the single-family residential market",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_012",
+      "dossier_version": "v1",
+      "claim": "Little Sleepies is a direct-to-consumer sleepwear and accessories brand",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_013",
+      "dossier_version": "v1",
+      "claim": "Fund VII exited the majority of its investment in Groundworks in March 2023; concurrent with that transaction, Fund VII and Fund VIII each made a minority investment in the company.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_014",
+      "dossier_version": "v1",
+      "claim": "Equity per platform: Up to $500 million of equity committed per platform",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_015",
+      "dossier_version": "v1",
+      "claim": "Cortec meets regularly with each portfolio company's leadership team to problem-solve collectively",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_016",
+      "dossier_version": "v1",
+      "claim": "Roughly 90% of its platforms have been entrepreneur-led or family-owned businesses",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v1_claim_017",
+      "dossier_version": "v1",
+      "claim": "Platform investments: 43",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_018",
+      "dossier_version": "v1",
+      "claim": "Add-on acquisitions: 160",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_019",
+      "dossier_version": "v1",
+      "claim": "Cortec is headquartered at 140 E 45th St, 43rd Floor, New York, NY 10017.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_020",
+      "dossier_version": "v1",
+      "claim": "Control investments",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v1_claim_021",
+      "dossier_version": "v1",
+      "claim": "Management teams leverage Cortec to address challenges and capitalize on opportunities.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_022",
+      "dossier_version": "v1",
+      "claim": "David L. Schnadig: Co-President",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_023",
+      "dossier_version": "v1",
+      "claim": "The firm describes itself as a differentiated, value-added partner for entrepreneurs, families, and management teams",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v1_claim_024",
+      "dossier_version": "v1",
+      "claim": "Platform realizations: 29",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v1_claim_025",
+      "dossier_version": "v1",
+      "claim": "In practice, the firm helps prioritize building teams",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_001",
+      "dossier_version": "v4",
+      "claim": "Since its founding, Palladium has acquired more than 230–240 businesses across 41 platform investments and completed 200+ add-on acquisitions.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_002",
+      "dossier_version": "v4",
+      "claim": "Palladium's assets under management are approximately $3.6 billion as of December 31, 2025",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_003",
+      "dossier_version": "v4",
+      "claim": "Palladium's Flagship strategy makes control-oriented equity investments of $50–150M targeting companies with $10–75M in EBITDA.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_004",
+      "dossier_version": "v4",
+      "claim": "Palladium has invested approximately $1.5 billion in the U.S. Hispanic market since 2000, and states that 60% of its portfolio companies are U.S. Hispanic businesses.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_005",
+      "dossier_version": "v4",
+      "claim": "Accupac Revenue: $150M–$450M(directional)",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_006",
+      "dossier_version": "v4",
+      "claim": "Palladium Heritage is a joint venture focused on the lower middle market, targeting B2B and Industrial companies with $3–12M EBITDA and $10–50M of invested capital.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_007",
+      "dossier_version": "v4",
+      "claim": "The claimed U.S. Hispanic-market concentration is not visible in the majority of portfolio company descriptions.",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_008",
+      "dossier_version": "v4",
+      "claim": "Yet across the 18 active portfolio companies profiled in this dossier, only Del Real Foods [del-real-foods-001] and Quirch Foods [quirch-foods-001] are explicitly described as Hispanic-cuisine or Hispanic-market-focused businesses in their own company materials, with Source Logistics [source-logistics-001] a partial third case",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_009",
+      "dossier_version": "v4",
+      "claim": "Disclosed buy-and-build activity is concentrated in two companies, not spread evenly across the portfolio. Palladium states that its portfolio companies average 4+ add-on acquisitions each [firm-profiler-011]. But of the 18 active companies in this portfolio, only two — Superior Environmental Solutions (6 add-ons since August 2023)",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_010",
+      "dossier_version": "v4",
+      "claim": "The other 16 companies' zero documented add-on transactions in these materials. Combining the firm's stated 4+ average with this observed concentration suggests either that add-on activity for most portfolio companies goes unannounced relative to SES's and Envoy's heavily press-released acquisition programs, or that the buy-and-build thesis is being executed unevenly across the current portfolio — a pattern the firm's own materials do not surface.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_011",
+      "dossier_version": "v4",
+      "claim": "Accupac is a North American-based brand development partner providing formulation, manufacturing, packaging, and innovative solutions for the personal care and beauty end-markets, founded in 1974 and specializing in complex liquid topical and oral care products.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_012",
+      "dossier_version": "v4",
+      "claim": "Cobalt Labs, Accupac's R&D arm, partners with sustainability-oriented customers to customize sustainable product formulas around recyclability, virgin-material content, and clean/all-natural designations.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_013",
+      "dossier_version": "v4",
+      "claim": "Bodewell Group is a strategic communications firm driving outcomes for public and private sector organizations, with a focus on the infrastructure sector.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_015",
+      "dossier_version": "v4",
+      "claim": "Bodewell Group HQ Location: San Diego, CA",
+      "expected_confidence": "medium"
+    },
+    {
+      "id": "v4_claim_016",
+      "dossier_version": "v4",
+      "claim": "Employee Count Estimate: Approximately 50–200 employees-inferred from the company's six-facility scale and Palladium Heritage's stated lower middle-market target size",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_017",
+      "dossier_version": "v4",
+      "claim": "Daniel's is a tech-enabled jewelry retailer serving a diverse customer base across the continental United States.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_018",
+      "dossier_version": "v4",
+      "claim": "On March 20, 2026, Palladium announced an agreement to acquire a majority equity interest in DME Express from WayPoint Capital Partners — Palladium's second hospice-industry investment and second platform investment by Palladium Equity Partners VI, LP.",
+      "expected_confidence": "high"
+    },
+    {
+      "id": "v4_claim_019",
+      "dossier_version": "v4",
+      "claim": "Fora Financial is a tech-enabled lending platform offering flexible working capital solutions to small and medium-sized businesses via proprietary technology.",
+      "expected_confidence": "low"
+    },
+    {
+      "id": "v4_claim_020",
+      "dossier_version": "v4",
+      "claim": "Its brand portfolio includes Panamei Seafood®, Mambo Foods®, and exclusive distribution of Chiquita® Frozen tropical fruits, High River Angus®, Kikiriquirch® poultry, and a licensed Certified Angus Beef® agreement.",
+      "expected_confidence": "high"
+    }
+  ]
+}
